@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldhmusic.music.mapper.UserMapper">
+    <select id="selectUserInfo"  resultType="UserInfo">
+        select * from user;
+    </select>
+<!--    <resultMap id="BaseResultMap" type="com.ldhmusic.music.entity.UserInfo">-->
+<!--        <id column="userId"  property="userId" />-->
+<!--        <result column="userName"  property="userName" />-->
+<!--        <result column="userPassword"  property="userPassword" />-->
+<!--        <result column="userImg"  property="userImg"/>-->
+<!--        <collection property="role" javaType="com.ldhmusic.music.entity.Role" >-->
+<!--            <id column="roleId"  property="roleId" />-->
+<!--            <result column="code"  property="code" />-->
+<!--            <result column="roleName"  property="roleName" />-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+    <resultMap id="userResultMap" type="UserInfo">
+        <id property="userId" column="userId" />
+        <result property="userName" column="username"/>
+        <result property="userPassword" column="userpassword"/>
+
+        <collection property="roles" ofType="Role">
+            <result property="code" column="code"></result>
+            <result property="roleName" column="roleName"/>
+        </collection>
+    </resultMap>
+    <select id="selectUserByID" parameterType="String" resultMap="userResultMap">
+        select u.*,r.code,r.roleName
+        from user u,role r, user_role ur
+        where u.userId = ur.userId
+        and r.roleId = ur.roleId
+        and u.userId = #{userId}
+    </select>
+</mapper>

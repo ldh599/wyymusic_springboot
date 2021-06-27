@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldhmusic.music.mapper.UserListMapper">
+    <select id="selectUserList"  resultType="UserList">
+        select * from user_list
+        <where>
+            <if test="userId != null">
+                userId=#{userId}
+            </if>
+            <if test="userListId != null">
+                userListId = #{userListId}
+            </if>
+        </where>
+    </select>
+<!--    <select id="selectUserListByListId" resultType="UserList">-->
+<!--        select * from userlist where userListId=#{userListId}-->
+<!--    </select>-->
+    <insert id="addNewUserSongList" parameterType="UserList">
+        insert into user_list(userListId,userListName, userId, userListText,userListImgUrl) values (#{userListId},#{userListName},#{userId},
+        "+ 点击修改歌单简介",#{userListImgUrl});
+    </insert>
+
+    <delete id="delUserListById" parameterType="UserList">
+        delete from user_list where userListId = #{userListId}
+    </delete>
+
+    <update id="updateUserListInfo" parameterType="UserList">
+        update user_list
+        <set>
+            <if test="userListName != null">
+                userListName = #{userListName}
+            </if>
+            <if test="userListText != null">
+                userListText = #{userListText}
+            </if>
+            <if test="userListImgUrl != null">
+                userListImgUrl = #{userListImgUrl}
+            </if>
+        </set>
+        where userListId = #{userListId}
+    </update>
+
+
+</mapper>

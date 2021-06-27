@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldhmusic.music.mapper.UserListSongMapper">
+    <select id="selectUserListSongs"  resultType="UserListSong">
+        select s.*,ul.*,si.singerName
+        from song s,user_list ul,user_list_songs uls,singer si
+        <where>
+            <if test="userListId != null">
+                uls.userListId=#{userListId}
+            </if>
+        </where>
+        <if test="songId">
+            and uls.songId=#{songId}
+        </if>
+        and uls.userListId = ul.userListId
+        and s.songId = uls.songId
+        and si.singerId = s.singerId
+    </select>
+
+    <delete id="delSongFromList" parameterType="UserListSong">
+        delete from user_List_songs where userListId = #{userListId} and songId = #{songId}
+    </delete>
+
+    <insert id="addSongToList" parameterType="UserListSong">
+        insert into user_list_songs(userListId,songId) values (#{userListId},#{songId});
+    </insert>
+</mapper>

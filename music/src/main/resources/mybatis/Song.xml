@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldhmusic.music.mapper.SongMapper">
+    <select id="selectSongInfo"  resultType="Song">
+        select * from userInfo
+        <where>
+            <if test="songId != null">
+                songId=#{songId}
+            </if>
+            <if test="singerId != null">
+                singerId = #{singerId}
+            </if>
+            <if test="songName !=null">
+                songName=#{songName}
+            </if>
+        </where>
+    </select>
+    <select id="findAllSong" resultType="Song">
+        SELECT song.*,singer.singerName
+        from song song JOIN singer singer
+        on song.singerId = singer.singerId
+    </select>
+
+    <select id="selectUserLikeSongsByUserId" resultType="Song">
+        select s.*,singer.singerName
+        from song s,user_like_songs uls,singer singer
+        where s.songId = uls.songId
+        and s.singerId=singer.singerId
+        and uls.userId = #{userId}
+    </select>
+
+    <insert id="addLikeSong" parameterType="Song">
+        insert into user_like_songs(userId,songId) values (#{userId},#{songId});
+    </insert>
+
+    <delete id="delLikeSong" parameterType="Song">
+        delete from user_like_songs where userId = #{userId} and songId=#{songId}
+    </delete>
+
+
+</mapper>
